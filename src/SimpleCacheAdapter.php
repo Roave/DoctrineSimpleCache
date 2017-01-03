@@ -46,7 +46,7 @@ final class SimpleCacheAdapter implements PsrCache
     /**
      * {@inheritDoc}
      */
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null) : bool
     {
         return $this->doctrineCache->save($key, $value, $ttl);
     }
@@ -54,7 +54,7 @@ final class SimpleCacheAdapter implements PsrCache
     /**
      * {@inheritDoc}
      */
-    public function delete($key)
+    public function delete($key) : bool
     {
         return $this->doctrineCache->delete($key);
     }
@@ -62,7 +62,7 @@ final class SimpleCacheAdapter implements PsrCache
     /**
      * {@inheritDoc}
      */
-    public function clear()
+    public function clear() : bool
     {
         return $this->doctrineCache->deleteAll();
     }
@@ -78,7 +78,7 @@ final class SimpleCacheAdapter implements PsrCache
     /**
      * {@inheritDoc}
      */
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple($values, $ttl = null) : bool
     {
         return $this->doctrineCache->saveMultiple($values, $ttl);
     }
@@ -86,7 +86,7 @@ final class SimpleCacheAdapter implements PsrCache
     /**
      * {@inheritDoc}
      */
-    public function deleteMultiple($keys)
+    public function deleteMultiple($keys) : bool
     {
         $success = true;
 
@@ -102,7 +102,7 @@ final class SimpleCacheAdapter implements PsrCache
     /**
      * {@inheritDoc}
      */
-    public function has($key)
+    public function has($key) : bool
     {
         return $this->doctrineCache->contains($key);
     }
