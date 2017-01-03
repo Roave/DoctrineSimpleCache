@@ -24,10 +24,10 @@ final class CacheException extends \RuntimeException implements PsrCacheExceptio
         ));
     }
 
-    public static function fromNonMultiSetCache(DoctrineCache $cache) : self
+    public static function fromNonMultiPutCache(DoctrineCache $cache) : self
     {
         return new self(sprintf(
-            'The given cache %s cannot multi-set, but you tried to use a feature that requires a multi-set cache.',
+            'The given cache %s cannot multi-put, but you tried to use a feature that requires a multi-put cache.',
             get_class($cache)
         ));
     }

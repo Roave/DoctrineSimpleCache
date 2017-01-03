@@ -44,18 +44,18 @@ final class CacheExceptionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testFromNonMultiSetCache()
+    public function testFromNonMultiPutCache()
     {
         /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(DoctrineCache::class);
 
-        $exception = CacheException::fromNonMultiSetCache($doctrineCache);
+        $exception = CacheException::fromNonMultiPutCache($doctrineCache);
 
         self::assertInstanceOf(CacheException::class, $exception);
         self::assertInstanceOf(PsrCacheException::class, $exception);
 
         self::assertStringMatchesFormat(
-            'The given cache %s cannot multi-set, but you tried to use a feature that requires a multi-set cache.',
+            'The given cache %s cannot multi-put, but you tried to use a feature that requires a multi-put cache.',
             $exception->getMessage()
         );
     }

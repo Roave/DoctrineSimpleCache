@@ -31,7 +31,7 @@ final class SimpleCacheAdapter implements PsrCache
             throw CacheException::fromNonMultiGetCache($this->doctrineCache);
         }
         if (!$this->doctrineCache instanceof MultiPutCache) {
-            throw CacheException::fromNonMultiSetCache($this->doctrineCache);
+            throw CacheException::fromNonMultiPutCache($this->doctrineCache);
         }
     }
 
