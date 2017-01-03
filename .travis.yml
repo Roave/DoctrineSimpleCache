@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - 7.1
+
+env:
+  matrix:
+    - DEPENDENCIES=""
+    - DEPENDENCIES="--prefer-lowest --prefer-stable"
+
+before_script:
+  - composer update --prefer-dist $DEPENDENCIES
+
+script:
+  - vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml --colors
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover.xml
