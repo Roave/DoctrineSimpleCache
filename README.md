@@ -1,6 +1,10 @@
 # Doctrine SimpleCache adapter
 
-[![Build Status](https://travis-ci.org/Roave/DoctrineSimpleCache.svg?branch=master)](https://travis-ci.org/Roave/DoctrineSimpleCache) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/?branch=master) [![Latest Stable Version](https://poser.pugx.org/Roave/DoctrineSimpleCache/v/stable)](https://packagist.org/packages/Roave/DoctrineSimpleCache) [![License](https://poser.pugx.org/Roave/DoctrineSimpleCache/license)](https://packagist.org/packages/Roave/DoctrineSimpleCache)
+[![Build Status](https://travis-ci.org/Roave/DoctrineSimpleCache.svg?branch=master)](https://travis-ci.org/Roave/DoctrineSimpleCache)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Roave/DoctrineSimpleCache/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/roave/doctrine-simplecache/v/stable)](https://packagist.org/packages/roave/doctrine-simplecache)
+[![License](https://poser.pugx.org/roave/doctrine-simplecache/license)](https://packagist.org/packages/roave/doctrine-simplecache)
 
 [PSR-16 SimpleCache](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-16-simple-cache.md)
 implementation that accepts a Doctrine Cache and adapts it for the PSR-16 standards.
