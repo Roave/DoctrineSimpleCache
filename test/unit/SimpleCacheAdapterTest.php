@@ -5,21 +5,50 @@ namespace RoaveTest\DoctrineSimpleCache;
 
 use Roave\DoctrineSimpleCache\CacheException;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
-use Doctrine\Common\Cache\Cache as DoctrineCache;
 use RoaveTestAsset\DoctrineSimpleCache\FullyImplementedCache;
+use RoaveTestAsset\DoctrineSimpleCache\NotClearableCache;
+use RoaveTestAsset\DoctrineSimpleCache\NotMultiGettableCache;
+use RoaveTestAsset\DoctrineSimpleCache\NotMultiPuttableCache;
 
 /**
  * @covers \Roave\DoctrineSimpleCache\SimpleCacheAdapter
  */
 final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 {
+    public function testConstructorThrowsExceptionWhenNotMultiPuttableCacheIsUsed()
+    {
+        /** @var NotMultiPuttableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(NotMultiPuttableCache::class);
+
+        $this->expectException(CacheException::class);
+        new SimpleCacheAdapter($doctrineCache);
+    }
+
+    public function testConstructorThrowsExceptionWhenNotClearableCacheIsUsed()
+    {
+        /** @var NotClearableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(NotClearableCache::class);
+
+        $this->expectException(CacheException::class);
+        new SimpleCacheAdapter($doctrineCache);
+    }
+
+    public function testConstructorThrowsExceptionWhenNotMultiGettableCacheIsUsed()
+    {
+        /** @var NotMultiGettableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(NotMultiGettableCache::class);
+
+        $this->expectException(CacheException::class);
+        new SimpleCacheAdapter($doctrineCache);
+    }
+
     public function testGetProxiesToDoctrineFetch()
     {
         $key = uniqid('key', true);
         $value = uniqid('value', true);
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(DoctrineCache::class);
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::once())->method('fetch')->with($key)->willReturn($value);
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);
@@ -32,8 +61,8 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         $value = uniqid('value', true);
         $ttl = random_int(1000,9999);
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(DoctrineCache::class);
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::once())->method('save')->with($key, $value, $ttl)->willReturn(true);
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);
@@ -44,44 +73,22 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $key = uniqid('key', true);
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(DoctrineCache::class);
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::once())->method('delete')->with($key)->willReturn(true);
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);
         self::assertTrue($psrCache->delete($key));
     }
 
-    public function testClearThrowsExceptionWhenInvalidCacheIsUsed()
-    {
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(DoctrineCache::class);
-
-        $psrCache = new SimpleCacheAdapter($doctrineCache);
-
-        $this->expectException(CacheException::class);
-        $psrCache->clear();
-    }
-
     public function testClearProxiesToDeleteAll()
     {
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::once())->method('deleteAll')->with()->willReturn(true);
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);
         self::assertTrue($psrCache->clear());
-    }
-
-    public function testGetMultipleThrowsExceptionWhenInvalidCacheIsUsed()
-    {
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(DoctrineCache::class);
-
-        $psrCache = new SimpleCacheAdapter($doctrineCache);
-
-        $this->expectException(CacheException::class);
-        $psrCache->getMultiple([]);
     }
 
     public function testGetMultipleProxiesToFetchMultiple()
@@ -92,23 +99,12 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         ];
         $keys = array_keys($values);
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::once())->method('fetchMultiple')->with($keys)->willReturn($values);
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);
         self::assertSame($values, $psrCache->getMultiple($keys));
-    }
-
-    public function testSetMultipleThrowsExceptionWhenInvalidCacheIsUsed()
-    {
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(DoctrineCache::class);
-
-        $psrCache = new SimpleCacheAdapter($doctrineCache);
-
-        $this->expectException(CacheException::class);
-        $psrCache->setMultiple([]);
     }
 
     public function testSetMultipleProxiesToSaveMultiple()
@@ -118,7 +114,7 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
             uniqid('key2', true) => uniqid('value2', true),
         ];
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::once())->method('saveMultiple')->with($values)->willReturn(true);
 
@@ -133,7 +129,7 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
             uniqid('key2', true),
         ];
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::at(0))->method('delete')->with($keys[0])->willReturn(true);
         $doctrineCache->expects(self::at(1))->method('delete')->with($keys[1])->willReturn(true);
@@ -149,7 +145,7 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
             uniqid('key2', true),
         ];
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::at(0))->method('delete')->with($keys[0])->willReturn(false);
         $doctrineCache->expects(self::at(1))->method('delete')->with($keys[1])->willReturn(true);
@@ -162,8 +158,8 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $key = uniqid('key', true);
 
-        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(DoctrineCache::class);
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(FullyImplementedCache::class);
         $doctrineCache->expects(self::once())->method('contains')->with($key)->willReturn(true);
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);

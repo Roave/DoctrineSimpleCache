@@ -12,13 +12,27 @@ use Psr\SimpleCache\CacheInterface as PsrCache;
 final class SimpleCacheAdapter implements PsrCache
 {
     /**
-     * @var DoctrineCache
+     * @var DoctrineCache|ClearableCache|MultiGetCache|MultiPutCache
      */
     private $doctrineCache;
 
+    /**
+     * @param DoctrineCache $doctrineCache
+     * @throws \Roave\DoctrineSimpleCache\CacheException
+     */
     public function __construct(DoctrineCache $doctrineCache)
     {
         $this->doctrineCache = $doctrineCache;
+
+        if (!$this->doctrineCache instanceof ClearableCache) {
+            throw CacheException::fromNonClearableCache($this->doctrineCache);
+        }
+        if (!$this->doctrineCache instanceof MultiGetCache) {
+            throw CacheException::fromNonMultiGetCache($this->doctrineCache);
+        }
+        if (!$this->doctrineCache instanceof MultiPutCache) {
+            throw CacheException::fromNonMultiSetCache($this->doctrineCache);
+        }
     }
 
     /**
@@ -47,40 +61,25 @@ final class SimpleCacheAdapter implements PsrCache
 
     /**
      * {@inheritDoc}
-     * @throws \Roave\DoctrineSimpleCache\CacheException
      */
     public function clear()
     {
-        if (!$this->doctrineCache instanceof ClearableCache) {
-            throw CacheException::fromNonClearableCache($this->doctrineCache);
-        }
-
         return $this->doctrineCache->deleteAll();
     }
 
     /**
      * {@inheritDoc}
-     * @throws \Roave\DoctrineSimpleCache\CacheException
      */
     public function getMultiple($keys, $default = null)
     {
-        if (!$this->doctrineCache instanceof MultiGetCache) {
-            throw CacheException::fromNonMultiGetCache($this->doctrineCache);
-        }
-
         return $this->doctrineCache->fetchMultiple($keys);
     }
 
     /**
      * {@inheritDoc}
-     * @throws \Roave\DoctrineSimpleCache\CacheException
      */
     public function setMultiple($values, $ttl = null)
     {
-        if (!$this->doctrineCache instanceof MultiPutCache) {
-            throw CacheException::fromNonMultiGetCache($this->doctrineCache);
-        }
-
         return $this->doctrineCache->saveMultiple($values, $ttl);
     }
 
