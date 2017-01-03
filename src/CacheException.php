@@ -10,22 +10,25 @@ final class CacheException extends \RuntimeException implements PsrCacheExceptio
 {
     public static function fromNonClearableCache(DoctrineCache $cache) : self
     {
-        return new self(
-            'The given cache was not clearable, but you tried to use a feature that requires a clearable cache.'
-        );
+        return new self(sprintf(
+            'The given cache %s was not clearable, but you tried to use a feature that requires a clearable cache.',
+            get_class($cache)
+        ));
     }
 
     public static function fromNonMultiGetCache(DoctrineCache $cache) : self
     {
-        return new self(
-            'The given cache cannot multi-get, but you tried to use a feature that requires a multi-get cache.'
-        );
+        return new self(sprintf(
+            'The given cache %s cannot multi-get, but you tried to use a feature that requires a multi-get cache.',
+            get_class($cache)
+        ));
     }
 
     public static function fromNonMultiSetCache(DoctrineCache $cache) : self
     {
-        return new self(
-            'The given cache cannot multi-set, but you tried to use a feature that requires a multi-set cache.'
-        );
+        return new self(sprintf(
+            'The given cache %s cannot multi-set, but you tried to use a feature that requires a multi-set cache.',
+            get_class($cache)
+        ));
     }
 }

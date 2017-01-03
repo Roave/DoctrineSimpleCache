@@ -22,8 +22,8 @@ final class CacheExceptionTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(CacheException::class, $exception);
         self::assertInstanceOf(PsrCacheException::class, $exception);
 
-        self::assertSame(
-            'The given cache was not clearable, but you tried to use a feature that requires a clearable cache.',
+        self::assertStringMatchesFormat(
+            'The given cache %s was not clearable, but you tried to use a feature that requires a clearable cache.',
             $exception->getMessage()
         );
     }
@@ -38,8 +38,8 @@ final class CacheExceptionTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(CacheException::class, $exception);
         self::assertInstanceOf(PsrCacheException::class, $exception);
 
-        self::assertSame(
-            'The given cache cannot multi-get, but you tried to use a feature that requires a multi-get cache.',
+        self::assertStringMatchesFormat(
+            'The given cache %s cannot multi-get, but you tried to use a feature that requires a multi-get cache.',
             $exception->getMessage()
         );
     }
@@ -54,8 +54,8 @@ final class CacheExceptionTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(CacheException::class, $exception);
         self::assertInstanceOf(PsrCacheException::class, $exception);
 
-        self::assertSame(
-            'The given cache cannot multi-set, but you tried to use a feature that requires a multi-set cache.',
+        self::assertStringMatchesFormat(
+            'The given cache %s cannot multi-set, but you tried to use a feature that requires a multi-set cache.',
             $exception->getMessage()
         );
     }
