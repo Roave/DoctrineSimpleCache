@@ -77,9 +77,7 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function getMultiple($keys, $default = null)
     {
-        $fetched = $this->doctrineCache->fetchMultiple($keys);
-
-        return array_merge(array_fill_keys($keys, $default), $fetched);
+        return array_merge(array_fill_keys($keys, $default), $this->doctrineCache->fetchMultiple($keys));
     }
 
     /**
