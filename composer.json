@@ -30,6 +30,6 @@
         }
     },
     "provide": {
-        "psr/simple-cache-implementation": "^1.0"
+        "psr/simple-cache-implementation": "1.0"
     }
 }
