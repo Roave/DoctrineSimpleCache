@@ -40,7 +40,12 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function get($key, $default = null)
     {
-        return $this->doctrineCache->fetch($key);
+        $value = $this->doctrineCache->fetch($key);
+        if ($value === false) {
+            return $default;
+        }
+
+        return $value;
     }
 
     /**
@@ -72,7 +77,7 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function getMultiple($keys, $default = null)
     {
-        return $this->doctrineCache->fetchMultiple($keys);
+        return array_merge(array_fill_keys($keys, $default), $this->doctrineCache->fetchMultiple($keys));
     }
 
     /**

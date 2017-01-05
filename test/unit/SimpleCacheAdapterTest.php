@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace RoaveTest\DoctrineSimpleCache;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Roave\DoctrineSimpleCache\CacheException;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
 use RoaveTestAsset\DoctrineSimpleCache\FullyImplementedCache;
@@ -55,11 +56,26 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         self::assertSame($value, $psrCache->get($key));
     }
 
+    public function testGetWithNotExistingKey()
+    {
+        $key = uniqid('key', true);
+        $value = uniqid('value', true);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->set($key, $value);
+
+        $default = uniqid('default', true);
+        self::assertSame($value, $psrCache->get($key, $default));
+
+        $anotherKey = uniqid('key', true);
+        self::assertSame($default, $psrCache->get($anotherKey, $default));
+    }
+
     public function testSetProxiesToDoctrineSave()
     {
         $key = uniqid('key', true);
         $value = uniqid('value', true);
-        $ttl = random_int(1000,9999);
+        $ttl = random_int(1000, 9999);
 
         /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(FullyImplementedCache::class);
@@ -105,6 +121,25 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);
         self::assertSame($values, $psrCache->getMultiple($keys));
+    }
+
+    public function testGetMultipleWithPartialKeys()
+    {
+        $values = [
+            uniqid('key1', true) => uniqid('value1', true),
+            uniqid('key2', true) => uniqid('value2', true),
+        ];
+        $keys = array_keys($values);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->setMultiple($values);
+
+        $default = uniqid('default', true);
+        $invalid_key = uniqid('key3', true);
+        $keys[] = $invalid_key;
+        $values[$invalid_key] = $default;
+
+        self::assertSame($values, $psrCache->getMultiple($keys, $default));
     }
 
     public function testSetMultipleProxiesToSaveMultiple()
