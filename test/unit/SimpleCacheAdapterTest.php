@@ -3,45 +3,14 @@ declare(strict_types = 1);
 
 namespace RoaveTest\DoctrineSimpleCache;
 
-use Roave\DoctrineSimpleCache\CacheException;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
 use RoaveTestAsset\DoctrineSimpleCache\FullyImplementedCache;
-use RoaveTestAsset\DoctrineSimpleCache\NotClearableCache;
-use RoaveTestAsset\DoctrineSimpleCache\NotMultiGettableCache;
-use RoaveTestAsset\DoctrineSimpleCache\NotMultiPuttableCache;
 
 /**
  * @covers \Roave\DoctrineSimpleCache\SimpleCacheAdapter
  */
 final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConstructorThrowsExceptionWhenNotMultiPuttableCacheIsUsed()
-    {
-        /** @var NotMultiPuttableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(NotMultiPuttableCache::class);
-
-        $this->expectException(CacheException::class);
-        new SimpleCacheAdapter($doctrineCache);
-    }
-
-    public function testConstructorThrowsExceptionWhenNotClearableCacheIsUsed()
-    {
-        /** @var NotClearableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(NotClearableCache::class);
-
-        $this->expectException(CacheException::class);
-        new SimpleCacheAdapter($doctrineCache);
-    }
-
-    public function testConstructorThrowsExceptionWhenNotMultiGettableCacheIsUsed()
-    {
-        /** @var NotMultiGettableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
-        $doctrineCache = $this->createMock(NotMultiGettableCache::class);
-
-        $this->expectException(CacheException::class);
-        new SimpleCacheAdapter($doctrineCache);
-    }
-
     public function testGetProxiesToDoctrineFetch()
     {
         $key = uniqid('key', true);

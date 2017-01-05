@@ -4,35 +4,22 @@ declare(strict_types = 1);
 namespace Roave\DoctrineSimpleCache;
 
 use Doctrine\Common\Cache\Cache as DoctrineCache;
-use Doctrine\Common\Cache\ClearableCache;
-use Doctrine\Common\Cache\MultiGetCache;
-use Doctrine\Common\Cache\MultiPutCache;
+use Doctrine\Common\Cache\CacheProvider;
 use Psr\SimpleCache\CacheInterface as PsrCache;
 
 final class SimpleCacheAdapter implements PsrCache
 {
     /**
-     * @var DoctrineCache|ClearableCache|MultiGetCache|MultiPutCache
+     * @var CacheProvider
      */
     private $doctrineCache;
 
     /**
      * @param DoctrineCache $doctrineCache
-     * @throws \Roave\DoctrineSimpleCache\CacheException
      */
     public function __construct(DoctrineCache $doctrineCache)
     {
         $this->doctrineCache = $doctrineCache;
-
-        if (!$this->doctrineCache instanceof ClearableCache) {
-            throw CacheException::fromNonClearableCache($this->doctrineCache);
-        }
-        if (!$this->doctrineCache instanceof MultiGetCache) {
-            throw CacheException::fromNonMultiGetCache($this->doctrineCache);
-        }
-        if (!$this->doctrineCache instanceof MultiPutCache) {
-            throw CacheException::fromNonMultiPutCache($this->doctrineCache);
-        }
     }
 
     /**
@@ -64,7 +51,7 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function clear() : bool
     {
-        return $this->doctrineCache->deleteAll();
+        return $this->doctrineCache->flushAll();
     }
 
     /**
