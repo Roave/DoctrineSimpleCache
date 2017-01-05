@@ -75,7 +75,7 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $key = uniqid('key', true);
         $value = uniqid('value', true);
-        $ttl = random_int(1000,9999);
+        $ttl = random_int(1000, 9999);
 
         /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(FullyImplementedCache::class);
@@ -124,23 +124,23 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testGetMultipleWithPartialKeys()
-	{
-		$values = [
+    {
+        $values = [
             uniqid('key1', true) => uniqid('value1', true),
             uniqid('key2', true) => uniqid('value2', true),
-		];
-		$keys = array_keys($values);
+        ];
+        $keys = array_keys($values);
 
-		$psrCache = new SimpleCacheAdapter(new ArrayCache());
-		$psrCache->setMultiple($values);
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->setMultiple($values);
 
-		$default = uniqid('default', true);
-		$invalid_key = uniqid('key3', true);
+        $default = uniqid('default', true);
+        $invalid_key = uniqid('key3', true);
         $keys[] = $invalid_key;
         $values[$invalid_key] = $default;
 
-		self::assertSame($values, $psrCache->getMultiple($keys, $default));
-	}
+        self::assertSame($values, $psrCache->getMultiple($keys, $default));
+    }
 
     public function testSetMultipleProxiesToSaveMultiple()
     {
