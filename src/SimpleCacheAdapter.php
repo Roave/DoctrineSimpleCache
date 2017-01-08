@@ -53,6 +53,20 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function set($key, $value, $ttl = null) : bool
     {
+        if ($ttl !== null) {
+            if ($ttl instanceof \DateInterval) {
+                $ttl = (new \DateTime())->setTimeStamp(0)->add($ttl)->getTimeStamp();
+            }
+
+            if (!is_integer($ttl)) {
+                throw new InvalidArgumentException;
+            }
+
+            if ($ttl <= 0) {
+                return $this->doctrineCache->delete($key);
+            }
+        }
+
         return $this->doctrineCache->save($key, $value, $ttl);
     }
 
@@ -85,6 +99,20 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function setMultiple($values, $ttl = null) : bool
     {
+        if ($ttl !== null) {
+            if ($ttl instanceof \DateInterval) {
+                $ttl = (new \DateTime())->setTimeStamp(0)->add($ttl)->getTimeStamp();
+            }
+
+            if (!is_integer($ttl)) {
+                throw new InvalidArgumentException;
+            }
+
+            if ($ttl <= 0) {
+                return $this->deleteMultiple(array_keys($values));
+            }
+        }
+
         return $this->doctrineCache->saveMultiple($values, $ttl);
     }
 
