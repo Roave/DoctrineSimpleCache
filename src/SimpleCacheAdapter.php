@@ -53,18 +53,20 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function set($key, $value, $ttl = null) : bool
     {
-        if ($ttl !== null) {
-            if ($ttl instanceof \DateInterval) {
-                $ttl = (new \DateTime())->setTimeStamp(0)->add($ttl)->getTimeStamp();
-            }
+        if ($ttl === null) {
+            return $this->doctrineCache->save($key, $value);
+        }
 
-            if (!is_integer($ttl)) {
-                throw new InvalidArgumentException;
-            }
+        if ($ttl instanceof \DateInterval) {
+            $ttl = self::convertDateIntervalToInteger($ttl);
+        }
 
-            if ($ttl <= 0) {
-                return $this->doctrineCache->delete($key);
-            }
+        if (!is_integer($ttl)) {
+            throw InvalidArgumentException::fromKeyAndInvalidTTL($key, $ttl);
+        }
+
+        if ($ttl <= 0) {
+            return $this->delete($key);
         }
 
         return $this->doctrineCache->save($key, $value, $ttl);
@@ -99,18 +101,20 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function setMultiple($values, $ttl = null) : bool
     {
-        if ($ttl !== null) {
-            if ($ttl instanceof \DateInterval) {
-                $ttl = (new \DateTime())->setTimeStamp(0)->add($ttl)->getTimeStamp();
-            }
+        if ($ttl === null) {
+            return $this->doctrineCache->saveMultiple($values);
+        }
 
-            if (!is_integer($ttl)) {
-                throw new InvalidArgumentException;
-            }
+        if ($ttl instanceof \DateInterval) {
+            $ttl = self::convertDateIntervalToInteger($ttl);
+        }
 
-            if ($ttl <= 0) {
-                return $this->deleteMultiple(array_keys($values));
-            }
+        if (!is_integer($ttl)) {
+            throw InvalidArgumentException::fromKeyAndInvalidTTL(key($values), $ttl);
+        }
+
+        if ($ttl <= 0) {
+            return $this->deleteMultiple(array_keys($values));
         }
 
         return $this->doctrineCache->saveMultiple($values, $ttl);
@@ -138,5 +142,14 @@ final class SimpleCacheAdapter implements PsrCache
     public function has($key) : bool
     {
         return $this->doctrineCache->contains($key);
+    }
+
+    private static function convertDateIntervalToInteger(\DateInterval $ttl) : int
+    {
+        // Timeestamp has 2038 year limitation, but it's unlikely to set TTL that long.
+        return (new \DateTime())
+            ->setTimestamp(0)
+            ->add($ttl)
+            ->getTimestamp();
     }
 }
