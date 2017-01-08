@@ -2,15 +2,14 @@
     "name": "roave/doctrine-simplecache",
     "description": "Doctrine Cache adapter for PSR-16 Simple Cache",
     "type": "library",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "~7.1.0",
         "doctrine/cache": "^1.6",
         "psr/simple-cache": "^1.0"
     },
     "require-dev": {
-        "cache/integration-tests": "dev-master",
+        "cache/integration-tests": "^0.15.0",
+        "cache/tag-interop": "^1.0@dev",
         "phpunit/phpunit": "^5.7",
         "humbug/humbug": "~1.0@dev"
     },

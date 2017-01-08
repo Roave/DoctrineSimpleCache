@@ -21,6 +21,7 @@ final class CacheIntegrationTest extends SimpleCacheTest
     {
         parent::setUp();
 
+        // @todo: Let's make these tests passed!
         $this->skippedTests['testSetTtl'] = true;
         $this->skippedTests['testSetExpiredTtl'] = true;
         $this->skippedTests['testSetMultipleTtl'] = true;
