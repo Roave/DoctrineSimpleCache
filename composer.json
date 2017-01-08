@@ -3,6 +3,7 @@
     "description": "Doctrine Cache adapter for PSR-16 Simple Cache",
     "type": "library",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "~7.1.0",
         "doctrine/cache": "^1.6",
