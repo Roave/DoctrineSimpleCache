@@ -146,7 +146,7 @@ final class SimpleCacheAdapter implements PsrCache
 
     private static function convertDateIntervalToInteger(\DateInterval $ttl) : int
     {
-        // Timeestamp has 2038 year limitation, but it's unlikely to set TTL that long.
+        // Timestamp has 2038 year limitation, but it's unlikely to set TTL that long.
         return (new \DateTime())
             ->setTimestamp(0)
             ->add($ttl)
