@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace RoaveTest\DoctrineSimpleCache;
+namespace RoaveTest\DoctrineSimpleCache\Exception;
 
 use Doctrine\Common\Cache\Cache as DoctrineCache;
 use Psr\SimpleCache\CacheException as PsrCacheException;
-use Roave\DoctrineSimpleCache\CacheException;
+use Roave\DoctrineSimpleCache\Exception\CacheException;
 
 /**
  * @covers \Roave\DoctrineSimpleCache\CacheException
