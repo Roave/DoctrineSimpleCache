@@ -37,10 +37,51 @@ final class SimpleCacheAdapter implements PsrCache
     }
 
     /**
+     * @param mixed $key
+     * @throws \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
+     */
+    private function validateKey($key) : void
+    {
+        if (!is_string($key)) {
+            throw Exception\InvalidArgumentException::fromInvalidType($key);
+        }
+
+        if ('' === $key) {
+            throw Exception\InvalidArgumentException::fromEmptyKey();
+        }
+
+        if (preg_match('/[' . preg_quote('{}()/\@:', '/') . ']/', $key)) {
+            throw Exception\InvalidArgumentException::fromInvalidKeyCharacters($key);
+        }
+    }
+
+    /**
+     * @param mixed $keys
+     * @return array
+     * @throws \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
+     */
+    private function filterValidateMultipleKeys($keys) : array
+    {
+        if ($keys instanceof \Traversable) {
+            $keys = iterator_to_array($keys);
+        }
+
+        if (!is_array($keys)) {
+            throw Exception\InvalidArgumentException::fromNonIterableKeys($keys);
+        }
+
+        array_map([$this, 'validateKey'], $keys);
+
+        return $keys;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function get($key, $default = null)
     {
+        $this->validateKey($key);
+
         $value = $this->doctrineCache->fetch($key);
         if ($value === false) {
             return $default;
@@ -54,6 +95,8 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function set($key, $value, $ttl = null) : bool
     {
+        $this->validateKey($key);
+
         if ($ttl === null) {
             return $this->doctrineCache->save($key, $value);
         }
@@ -78,6 +121,7 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function delete($key) : bool
     {
+        $this->validateKey($key);
         return $this->doctrineCache->delete($key);
     }
 
@@ -90,18 +134,33 @@ final class SimpleCacheAdapter implements PsrCache
     }
 
     /**
-     * {@inheritDoc}
+     * @param array|\Traversable $keys
+     * @param mixed $default
+     * @return array
+     * @throws \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
      */
     public function getMultiple($keys, $default = null)
     {
+        $keys = $this->filterValidateMultipleKeys($keys);
         return array_merge(array_fill_keys($keys, $default), $this->doctrineCache->fetchMultiple($keys));
     }
 
     /**
-     * {@inheritDoc}
+     * @param array|\Traversable $values
+     * @param null|int|\DateInterval $ttl
+     * @return bool
+     * @throws \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
      */
     public function setMultiple($values, $ttl = null) : bool
     {
+        if (!$values instanceof \Traversable && !is_array($values)) {
+            throw Exception\InvalidArgumentException::fromNonIterableKeys($values);
+        }
+
+        foreach ($values as $k => $v) {
+            $this->validateKey($k);
+        }
+
         if ($ttl === null) {
             return $this->doctrineCache->saveMultiple($values);
         }
@@ -122,12 +181,15 @@ final class SimpleCacheAdapter implements PsrCache
     }
 
     /**
-     * {@inheritDoc}
+     * @param array|\Traversable $keys
+     * @return bool
+     * @throws \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
      */
     public function deleteMultiple($keys) : bool
     {
-        $success = true;
+        $keys = $this->filterValidateMultipleKeys($keys);
 
+        $success = true;
         foreach ($keys as $key) {
             if (!$this->delete($key)) {
                 $success = false;
@@ -142,6 +204,7 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function has($key) : bool
     {
+        $this->validateKey($key);
         return $this->doctrineCache->contains($key);
     }
 
