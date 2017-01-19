@@ -5,23 +5,24 @@ use Cache\IntegrationTests\SimpleCacheTest;
 use Doctrine\Common\Cache\ArrayCache;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class CacheIntegrationTest extends SimpleCacheTest
 {
     /**
      * @return \Psr\SimpleCache\CacheInterface that is used in the tests
      */
-    public function createSimpleCache()
+    public function createSimpleCache() : \Psr\SimpleCache\CacheInterface
     {
-        $doctrineCache = new ArrayCache();
-
-        return new SimpleCacheAdapter($doctrineCache);
+        return new SimpleCacheAdapter(new ArrayCache());
     }
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
-        // @todo: Let's make these tests passed!
+        // @todo: Let's make these tests pass
         $this->skippedTests['testSetTtl'] = true;
         $this->skippedTests['testSetExpiredTtl'] = true;
         $this->skippedTests['testSetMultipleTtl'] = true;
