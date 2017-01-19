@@ -85,6 +85,34 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($psrCache->set($key, $value, $ttl));
     }
 
+    public function testSetWithDateIntervalTTL()
+    {
+        $key = uniqid('key', true);
+        $value = uniqid('value', true);
+        $ttl_date = \DateInterval::createFromDateString('1 day');
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+
+        // This does not test if ttl is correctly set to 86400 sec.
+        self::assertTrue($psrCache->set($key, $value, $ttl_date));
+        self::assertSame($psrCache->get($key), $value);
+    }
+
+    public function testSetWithNonPositiveTTL()
+    {
+        $key = uniqid('key', true);
+        $value = uniqid('value', true);
+        $ttl = random_int(1000, 9999);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+
+        $psrCache->set($key, $value, $ttl);
+        self::assertSame($psrCache->get($key), $value);
+
+        $psrCache->set($key, $value, -1);
+        self::assertNull($psrCache->get($key), null);
+    }
+
     public function testDeleteProxiesToDoctrineDelete()
     {
         $key = uniqid('key', true);
@@ -155,6 +183,40 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
         $psrCache = new SimpleCacheAdapter($doctrineCache);
         self::assertTrue($psrCache->setMultiple($values));
+    }
+
+    public function testSetMultipleWithDateIntervalTTL()
+    {
+        $values = [
+            uniqid('key1', true) => uniqid('value1', true),
+            uniqid('key2', true) => uniqid('value2', true),
+        ];
+        $keys = array_keys($values);
+        $ttl_date = \DateInterval::createFromDateString('1 day');
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+
+        // This does not test if ttl is correctly set to 86400 sec.
+        self::assertTrue($psrCache->setMultiple($values, $ttl_date));
+        self::assertSame($values, $psrCache->getMultiple($keys));
+    }
+
+    public function testSetMultipleWithNonPositiveTTL()
+    {
+        $values = [
+            uniqid('key1', true) => uniqid('value1', true),
+            uniqid('key2', true) => uniqid('value2', true),
+        ];
+        $keys = array_keys($values);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->setMultiple($values);
+
+        $volatile = [$keys[0] => uniqid('value3', true)];
+        $psrCache->setMultiple($volatile, -1);
+
+        self::assertNull($psrCache->get($keys[0]));
+        self::assertNotNull($psrCache->get($keys[1]));
     }
 
     public function testDeleteMultipleReturnsTrueWhenAllDeletesSucceed()
