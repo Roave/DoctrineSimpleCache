@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace RoaveTest\DoctrineSimpleCache;
 
 use Doctrine\Common\Cache\ArrayCache;
-use Roave\DoctrineSimpleCache\CacheException;
+use Roave\DoctrineSimpleCache\Exception\CacheException;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
 use RoaveTestAsset\DoctrineSimpleCache\FullyImplementedCache;
 use RoaveTestAsset\DoctrineSimpleCache\NotClearableCache;

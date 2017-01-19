@@ -23,7 +23,10 @@
     "autoload": {
         "psr-4": {
             "Roave\\DoctrineSimpleCache\\": "src/"
-        }
+        },
+        "files": [
+            "namespace-bc-aliases.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

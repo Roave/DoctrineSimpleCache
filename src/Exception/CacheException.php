@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Roave\DoctrineSimpleCache;
+namespace Roave\DoctrineSimpleCache\Exception;
 
 use Psr\SimpleCache\CacheException as PsrCacheException;
 use Doctrine\Common\Cache\Cache as DoctrineCache;

@@ -18,20 +18,20 @@ final class SimpleCacheAdapter implements PsrCache
 
     /**
      * @param DoctrineCache $doctrineCache
-     * @throws \Roave\DoctrineSimpleCache\CacheException
+     * @throws \Roave\DoctrineSimpleCache\Exception\CacheException
      */
     public function __construct(DoctrineCache $doctrineCache)
     {
         $this->doctrineCache = $doctrineCache;
 
         if (!$this->doctrineCache instanceof ClearableCache) {
-            throw CacheException::fromNonClearableCache($this->doctrineCache);
+            throw Exception\CacheException::fromNonClearableCache($this->doctrineCache);
         }
         if (!$this->doctrineCache instanceof MultiGetCache) {
-            throw CacheException::fromNonMultiGetCache($this->doctrineCache);
+            throw Exception\CacheException::fromNonMultiGetCache($this->doctrineCache);
         }
         if (!$this->doctrineCache instanceof MultiPutCache) {
-            throw CacheException::fromNonMultiPutCache($this->doctrineCache);
+            throw Exception\CacheException::fromNonMultiPutCache($this->doctrineCache);
         }
     }
 
