@@ -58,7 +58,7 @@ final class SimpleCacheAdapter implements PsrCache
         }
 
         if ($ttl instanceof \DateInterval) {
-            $ttl = self::convertDateIntervalToInteger($ttl);
+            $ttl = $this->convertDateIntervalToInteger($ttl);
         }
 
         if (!is_integer($ttl)) {
@@ -144,7 +144,7 @@ final class SimpleCacheAdapter implements PsrCache
         return $this->doctrineCache->contains($key);
     }
 
-    private static function convertDateIntervalToInteger(\DateInterval $ttl) : int
+    private function convertDateIntervalToInteger(\DateInterval $ttl) : int
     {
         // Timestamp has 2038 year limitation, but it's unlikely to set TTL that long.
         return (new \DateTime())
