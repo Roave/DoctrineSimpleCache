@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
 
 /**
- * @codeCoverageIgnore
+ * @coversNothing
  */
 final class CacheIntegrationTest extends SimpleCacheTest
 {
