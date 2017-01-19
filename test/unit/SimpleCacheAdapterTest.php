@@ -5,6 +5,7 @@ namespace RoaveTest\DoctrineSimpleCache;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Roave\DoctrineSimpleCache\Exception\CacheException;
+use Roave\DoctrineSimpleCache\Exception\InvalidArgumentException;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
 use RoaveTestAsset\DoctrineSimpleCache\FullyImplementedCache;
 use RoaveTestAsset\DoctrineSimpleCache\NotClearableCache;
@@ -16,6 +17,8 @@ use RoaveTestAsset\DoctrineSimpleCache\NotMultiPuttableCache;
  */
 final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 {
+    use TTLProviderTrait;
+
     public function testConstructorThrowsExceptionWhenNotMultiPuttableCacheIsUsed()
     {
         /** @var NotMultiPuttableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
@@ -111,6 +114,21 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
         $psrCache->set($key, $value, -1);
         self::assertNull($psrCache->get($key), null);
+    }
+
+    /**
+     * @param $ttl
+     * @dataProvider invalidTTLs
+     */
+    public function testSetWithInvalidTTL($ttl)
+    {
+        self::expectException(InvalidArgumentException::class);
+
+        $key = uniqid('key', true);
+        $value = uniqid('value', true);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->set($key, $value, $ttl);
     }
 
     public function testDeleteProxiesToDoctrineDelete()
@@ -217,6 +235,23 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
         self::assertNull($psrCache->get($keys[0]));
         self::assertNotNull($psrCache->get($keys[1]));
+    }
+
+    /**
+     * @param $ttl
+     * @dataProvider invalidTTLs
+     */
+    public function testSetMultipleWithInvalidTTL($ttl)
+    {
+        self::expectException(InvalidArgumentException::class);
+
+        $values = [
+            uniqid('key1', true) => uniqid('value1', true),
+            uniqid('key2', true) => uniqid('value2', true),
+        ];
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->setMultiple($values, $ttl);
     }
 
     public function testDeleteMultipleReturnsTrueWhenAllDeletesSucceed()

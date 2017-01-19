@@ -1,6 +1,8 @@
 <?php
 declare(strict_types = 1);
 
+namespace RoaveTest\DoctrineSimpleCache;
+
 use Cache\IntegrationTests\SimpleCacheTest;
 use Doctrine\Common\Cache\ArrayCache;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;

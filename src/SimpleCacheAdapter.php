@@ -8,6 +8,7 @@ use Doctrine\Common\Cache\ClearableCache;
 use Doctrine\Common\Cache\MultiGetCache;
 use Doctrine\Common\Cache\MultiPutCache;
 use Psr\SimpleCache\CacheInterface as PsrCache;
+use Roave\DoctrineSimpleCache\Exception\InvalidArgumentException;
 
 final class SimpleCacheAdapter implements PsrCache
 {
