@@ -131,17 +131,17 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $ttl
+     * @param mixed $ttl
      * @dataProvider invalidTTLs
      */
     public function testSetWithInvalidTTL($ttl)
     {
-        self::expectException(InvalidArgumentException::class);
-
         $key = uniqid('key', true);
         $value = uniqid('value', true);
 
         $psrCache = new SimpleCacheAdapter(new ArrayCache());
+
+        $this->expectException(InvalidArgumentException::class);
         $psrCache->set($key, $value, $ttl);
     }
 
@@ -252,19 +252,19 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $ttl
+     * @param mixed $ttl
      * @dataProvider invalidTTLs
      */
     public function testSetMultipleWithInvalidTTL($ttl)
     {
-        self::expectException(InvalidArgumentException::class);
-
         $values = [
             uniqid('key1', true) => uniqid('value1', true),
             uniqid('key2', true) => uniqid('value2', true),
         ];
 
         $psrCache = new SimpleCacheAdapter(new ArrayCache());
+
+        $this->expectException(InvalidArgumentException::class);
         $psrCache->setMultiple($values, $ttl);
     }
 
