@@ -27,9 +27,6 @@ final class CacheIntegrationTest extends SimpleCacheTest
         // @todo: Let's make these tests pass
         $this->skippedTests['testSetMultipleWithGenerator'] = true;
         $this->skippedTests['testGetMultipleWithGenerator'] = true;
-        $this->skippedTests['testGetMultipleNoIterable'] = true;
-        $this->skippedTests['testSetMultipleNoIterable'] = true;
-        $this->skippedTests['testDeleteMultipleNoIterable'] = true;
         $this->skippedTests['testObjectDoesNotChangeInCache'] = true;
         $this->skippedTests['testDataTypeBoolean'] = true;
 
