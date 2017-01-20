@@ -25,8 +25,6 @@ final class CacheIntegrationTest extends SimpleCacheTest
         parent::setUp();
 
         // @todo: Let's make these tests pass
-        $this->skippedTests['testSetMultipleWithGenerator'] = true;
-        $this->skippedTests['testGetMultipleWithGenerator'] = true;
         $this->skippedTests['testObjectDoesNotChangeInCache'] = true;
 
         // https://github.com/php-cache/integration-tests/pull/74/files
