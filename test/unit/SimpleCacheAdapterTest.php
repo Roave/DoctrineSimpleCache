@@ -274,6 +274,26 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         $psrCache->getMultiple(new \ArrayObject(array_keys($values)));
     }
 
+    public function testGetMultipleAcceptsGenerator()
+    {
+        $values = [
+            uniqid('key0', true) => uniqid('value0', true),
+            uniqid('key1', true) => uniqid('value1', true),
+        ];
+
+        $generator = function () use ($values) {
+            /** @noinspection ForeachOnArrayComponentsInspection */
+            foreach (array_keys($values) as $k) {
+                yield $k;
+            }
+        };
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->setMultiple($values);
+
+        self::assertSame($values, $psrCache->getMultiple($generator()));
+    }
+
     public function testGetMultipleThrowsExceptionWhenNotArrayOrTraversable()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -354,6 +374,28 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
         $psrCache = new SimpleCacheAdapter(new ArrayCache());
         $psrCache->setMultiple(uniqid('string', true));
+    }
+
+    public function testSetMultipleAcceptsGenerator()
+    {
+        $key0 = uniqid('key0', true);
+        $key1 = uniqid('key1', true);
+        $values = [
+            $key0 => uniqid('value0', true),
+            $key1 => uniqid('value1', true),
+        ];
+
+        $generator = function () use ($values) {
+            foreach ($values as $k => $v) {
+                yield $k => $v;
+            }
+        };
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->setMultiple($generator());
+
+        self::assertSame($values[$key0], $psrCache->get($key0));
+        self::assertSame($values[$key1], $psrCache->get($key1));
     }
 
     public function testDeleteMultipleReturnsTrueWhenAllDeletesSucceed()
