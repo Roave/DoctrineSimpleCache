@@ -162,12 +162,14 @@ final class SimpleCacheAdapter implements PsrCache
             throw Exception\InvalidArgumentException::fromNonIterableKeys($values);
         }
 
+        $validatedValues = [];
         foreach ($values as $k => $v) {
             $this->validateKey($k);
+            $validatedValues[$k] = $v;
         }
 
         if ($ttl === null) {
-            return $this->doctrineCache->saveMultiple($values);
+            return $this->doctrineCache->saveMultiple($validatedValues);
         }
 
         if ($ttl instanceof \DateInterval) {
@@ -175,14 +177,14 @@ final class SimpleCacheAdapter implements PsrCache
         }
 
         if (!is_integer($ttl)) {
-            throw InvalidArgumentException::fromKeyAndInvalidTTL(key($values), $ttl);
+            throw InvalidArgumentException::fromKeyAndInvalidTTL(key($validatedValues), $ttl);
         }
 
         if ($ttl <= 0) {
-            return $this->deleteMultiple(array_keys($values));
+            return $this->deleteMultiple(array_keys($validatedValues));
         }
 
-        return $this->doctrineCache->saveMultiple($values, $ttl);
+        return $this->doctrineCache->saveMultiple($validatedValues, $ttl);
     }
 
     /**
