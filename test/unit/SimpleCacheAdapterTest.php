@@ -120,6 +120,16 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         self::assertSame($default, $psrCache->get($anotherKey, $default));
     }
 
+    public function testGetWithFalseValueStoredInCache()
+    {
+        $key = uniqid('key', true);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->set($key, false);
+
+        self::assertFalse($psrCache->get($key, uniqid('default', true)));
+    }
+
     public function testSetProxiesToDoctrineSave()
     {
         $key = uniqid('key', true);
