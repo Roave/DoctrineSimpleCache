@@ -33,6 +33,38 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function validKeys()
+    {
+        return [
+            ['AbC19_.'],
+            ['1234567890123456789012345678901234567890123456789012345678901234'],
+        ];
+    }
+
+    public function invalidKeys()
+    {
+        return [
+            [''],
+            [true],
+            [false],
+            [null],
+            [2],
+            [2.5],
+            ['{str'],
+            ['rand{'],
+            ['rand{str'],
+            ['rand}str'],
+            ['rand(str'],
+            ['rand)str'],
+            ['rand/str'],
+            ['rand\\str'],
+            ['rand@str'],
+            ['rand:str'],
+            [new \stdClass()],
+            [['array']],
+        ];
+    }
+
     public function testConstructorThrowsExceptionWhenNotMultiPuttableCacheIsUsed()
     {
         /** @var NotMultiPuttableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
@@ -202,6 +234,44 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         self::assertSame($values, $psrCache->getMultiple($keys, $default));
     }
 
+    /**
+     * @param mixed $key
+     * @dataProvider invalidKeys
+     */
+    public function testGetMultipleThrowsExceptionWithInvalidKeys($key)
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->getMultiple([$key]);
+    }
+
+    /**
+     * @param mixed $key
+     * @dataProvider validKeys
+     */
+    public function testGetMultipleAcceptsTraversable($key)
+    {
+        $values = [
+            $key => uniqid('value', true),
+        ];
+
+        /** @var FullyImplementedCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(FullyImplementedCache::class);
+        $doctrineCache->expects(self::once())->method('fetchMultiple')->with(array_keys($values))->willReturn($values);
+
+        $psrCache = new SimpleCacheAdapter($doctrineCache);
+        $psrCache->getMultiple(new \ArrayObject(array_keys($values)));
+    }
+
+    public function testGetMultipleThrowsExceptionWhenNotArrayOrTraversable()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->getMultiple(uniqid('string', true));
+    }
+
     public function testSetMultipleProxiesToSaveMultiple()
     {
         $values = [
@@ -266,6 +336,14 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $psrCache->setMultiple($values, $ttl);
+    }
+
+    public function testSetMultipleThrowsExceptionWhenNotArrayOrTraversable()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $psrCache = new SimpleCacheAdapter(new ArrayCache());
+        $psrCache->setMultiple(uniqid('string', true));
     }
 
     public function testDeleteMultipleReturnsTrueWhenAllDeletesSucceed()
