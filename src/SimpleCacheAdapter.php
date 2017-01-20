@@ -84,6 +84,11 @@ final class SimpleCacheAdapter implements PsrCache
 
         $value = $this->doctrineCache->fetch($key);
         if ($value === false) {
+            // Doctrine cache returns `false` when cache doesn't contain, but also `false` if the value stored is
+            // `false`, so check to see if the cache contains the key; if so, we probably meant to return `false`
+            if ($this->doctrineCache->contains($key)) {
+                return false;
+            }
             return $default;
         }
 
