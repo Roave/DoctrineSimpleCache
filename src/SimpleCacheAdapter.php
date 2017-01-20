@@ -8,6 +8,7 @@ use Doctrine\Common\Cache\ClearableCache;
 use Doctrine\Common\Cache\MultiGetCache;
 use Doctrine\Common\Cache\MultiPutCache;
 use Psr\SimpleCache\CacheInterface as PsrCache;
+use Roave\DoctrineSimpleCache\Exception\InvalidArgumentException;
 
 final class SimpleCacheAdapter implements PsrCache
 {
@@ -53,6 +54,22 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function set($key, $value, $ttl = null) : bool
     {
+        if ($ttl === null) {
+            return $this->doctrineCache->save($key, $value);
+        }
+
+        if ($ttl instanceof \DateInterval) {
+            $ttl = $this->convertDateIntervalToInteger($ttl);
+        }
+
+        if (!is_integer($ttl)) {
+            throw InvalidArgumentException::fromKeyAndInvalidTTL($key, $ttl);
+        }
+
+        if ($ttl <= 0) {
+            return $this->delete($key);
+        }
+
         return $this->doctrineCache->save($key, $value, $ttl);
     }
 
@@ -85,6 +102,22 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function setMultiple($values, $ttl = null) : bool
     {
+        if ($ttl === null) {
+            return $this->doctrineCache->saveMultiple($values);
+        }
+
+        if ($ttl instanceof \DateInterval) {
+            $ttl = self::convertDateIntervalToInteger($ttl);
+        }
+
+        if (!is_integer($ttl)) {
+            throw InvalidArgumentException::fromKeyAndInvalidTTL(key($values), $ttl);
+        }
+
+        if ($ttl <= 0) {
+            return $this->deleteMultiple(array_keys($values));
+        }
+
         return $this->doctrineCache->saveMultiple($values, $ttl);
     }
 
@@ -110,5 +143,14 @@ final class SimpleCacheAdapter implements PsrCache
     public function has($key) : bool
     {
         return $this->doctrineCache->contains($key);
+    }
+
+    private function convertDateIntervalToInteger(\DateInterval $ttl) : int
+    {
+        // Timestamp has 2038 year limitation, but it's unlikely to set TTL that long.
+        return (new \DateTime())
+            ->setTimestamp(0)
+            ->add($ttl)
+            ->getTimestamp();
     }
 }

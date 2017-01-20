@@ -8,7 +8,7 @@ use Psr\SimpleCache\CacheException as PsrCacheException;
 use Roave\DoctrineSimpleCache\Exception\CacheException;
 
 /**
- * @covers \Roave\DoctrineSimpleCache\CacheException
+ * @covers \Roave\DoctrineSimpleCache\Exception\CacheException
  */
 final class CacheExceptionTest extends \PHPUnit_Framework_TestCase
 {
