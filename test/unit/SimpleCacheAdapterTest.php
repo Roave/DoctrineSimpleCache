@@ -17,7 +17,21 @@ use RoaveTestAsset\DoctrineSimpleCache\NotMultiPuttableCache;
  */
 final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    use TTLProviderTrait;
+    public function invalidTTLs() : array
+    {
+        return [
+            [''],
+            [true],
+            [false],
+            ['abc'],
+            [2.5],
+            [' 1'], // can be casted to a int
+            ['12foo'], // can be casted to a int
+            ['025'], // can be interpreted as hex
+            [new \stdClass()],
+            [['array']],
+        ];
+    }
 
     public function testConstructorThrowsExceptionWhenNotMultiPuttableCacheIsUsed()
     {
