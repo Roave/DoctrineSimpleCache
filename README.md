@@ -40,8 +40,3 @@ final class MyCacheFactory
 }
 ```
 
-## Todo
-
- * [ ] Catch/rethrow appropriately wrapped exceptions (implementing interfaces)
- * [ ] Implementation of `deleteMultiple` is a bit dodgy, improve this
-
