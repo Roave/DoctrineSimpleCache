@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": "~7.1.0",
-        "doctrine/cache": "^1.6",
+        "doctrine/cache": "^1.7",
         "psr/simple-cache": "^1.0"
     },
     "require-dev": {
