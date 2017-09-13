@@ -64,10 +64,19 @@ final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testConstructorThrowsExceptionWhenNotMultiPuttableCacheIsUsed()
+    public function testConstructorThrowsExceptionWhenNotMultiOperationCacheIsUsed()
     {
         /** @var NotMultiOperationCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
         $doctrineCache = $this->createMock(NotMultiOperationCache::class);
+
+        $this->expectException(CacheException::class);
+        new SimpleCacheAdapter($doctrineCache);
+    }
+
+    public function testConstructorThrowsExceptionWhenNotClearableCacheIsUsed()
+    {
+        /** @var NotClearableCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(NotClearableCache::class);
 
         $this->expectException(CacheException::class);
         new SimpleCacheAdapter($doctrineCache);

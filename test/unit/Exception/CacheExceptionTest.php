@@ -12,6 +12,22 @@ use Roave\DoctrineSimpleCache\Exception\CacheException;
  */
 final class CacheExceptionTest extends \PHPUnit_Framework_TestCase
 {
+    public function testFromNonClearableCache()
+    {
+        /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
+        $doctrineCache = $this->createMock(DoctrineCache::class);
+
+        $exception = CacheException::fromNonClearableCache($doctrineCache);
+
+        self::assertInstanceOf(CacheException::class, $exception);
+        self::assertInstanceOf(PsrCacheException::class, $exception);
+
+        self::assertStringMatchesFormat(
+            'The given cache %s was not clearable, but you tried to use a feature that requires a clearable cache.',
+            $exception->getMessage()
+        );
+    }
+
     public function testFromNonMultiOperationCache()
     {
         /** @var DoctrineCache|\PHPUnit_Framework_MockObject_MockObject $doctrineCache */
