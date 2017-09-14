@@ -26,7 +26,7 @@ Create your Doctrine Cache the usual way and inject it into `SimpleCacheAdapter`
 
 namespace App;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
 use Doctrine\Common\Cache\RedisCache;
@@ -40,3 +40,12 @@ final class MyCacheFactory
 }
 ```
 
+## Upgrade Guide
+
+### BC Breaks in 2.0
+
+ * Support for `MultiOperationCache` added, includes support for `deleteMultiple` in Doctrine 1.7 breaks:
+   * `CacheException` static constructors `fromNonMultiGetCache` and `fromNonMultiPutCache` have been replaced with
+     `fromNonMultiOperationCache`.
+   * `SimpleCacheAdapter` now requires an adapter implementing `MultiOperationCache`, and no longer specifically
+     requires a cache implementing `MultiGetCache` or `MultiPutCache` explicitly.

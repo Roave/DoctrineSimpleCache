@@ -5,15 +5,14 @@ namespace Roave\DoctrineSimpleCache;
 
 use Doctrine\Common\Cache\Cache as DoctrineCache;
 use Doctrine\Common\Cache\ClearableCache;
-use Doctrine\Common\Cache\MultiGetCache;
-use Doctrine\Common\Cache\MultiPutCache;
+use Doctrine\Common\Cache\MultiOperationCache;
 use Psr\SimpleCache\CacheInterface as PsrCache;
 use Roave\DoctrineSimpleCache\Exception\InvalidArgumentException;
 
 final class SimpleCacheAdapter implements PsrCache
 {
     /**
-     * @var DoctrineCache|ClearableCache|MultiGetCache|MultiPutCache
+     * @var DoctrineCache|ClearableCache|MultiOperationCache
      */
     private $doctrineCache;
 
@@ -26,13 +25,11 @@ final class SimpleCacheAdapter implements PsrCache
         $this->doctrineCache = $doctrineCache;
 
         if (!$this->doctrineCache instanceof ClearableCache) {
-            throw Exception\CacheException::fromNonClearableCache($this->doctrineCache);
+            throw Exception\CacheException::fromNonMultiOperationCache($this->doctrineCache);
         }
-        if (!$this->doctrineCache instanceof MultiGetCache) {
-            throw Exception\CacheException::fromNonMultiGetCache($this->doctrineCache);
-        }
-        if (!$this->doctrineCache instanceof MultiPutCache) {
-            throw Exception\CacheException::fromNonMultiPutCache($this->doctrineCache);
+
+        if (!$this->doctrineCache instanceof MultiOperationCache) {
+            throw Exception\CacheException::fromNonMultiOperationCache($this->doctrineCache);
         }
     }
 
@@ -110,7 +107,7 @@ final class SimpleCacheAdapter implements PsrCache
             $ttl = $this->convertDateIntervalToInteger($ttl);
         }
 
-        if (!is_integer($ttl)) {
+        if (!is_int($ttl)) {
             throw InvalidArgumentException::fromKeyAndInvalidTTL($key, $ttl);
         }
 
@@ -144,7 +141,7 @@ final class SimpleCacheAdapter implements PsrCache
      * @return array
      * @throws \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, $default = null) : array
     {
         $keys = $this->filterValidateMultipleKeys($keys);
         return array_merge(array_fill_keys($keys, $default), $this->doctrineCache->fetchMultiple($keys));
@@ -173,10 +170,10 @@ final class SimpleCacheAdapter implements PsrCache
         }
 
         if ($ttl instanceof \DateInterval) {
-            $ttl = self::convertDateIntervalToInteger($ttl);
+            $ttl = $this->convertDateIntervalToInteger($ttl);
         }
 
-        if (!is_integer($ttl)) {
+        if (!is_int($ttl)) {
             throw InvalidArgumentException::fromKeyAndInvalidTTL(key($validatedValues), $ttl);
         }
 
@@ -194,16 +191,7 @@ final class SimpleCacheAdapter implements PsrCache
      */
     public function deleteMultiple($keys) : bool
     {
-        $keys = $this->filterValidateMultipleKeys($keys);
-
-        $success = true;
-        foreach ($keys as $key) {
-            if (!$this->delete($key)) {
-                $success = false;
-            }
-        }
-
-        return $success;
+        return $this->doctrineCache->deleteMultiple($this->filterValidateMultipleKeys($keys));
     }
 
     /**

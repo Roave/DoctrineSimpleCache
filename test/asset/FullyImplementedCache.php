@@ -5,9 +5,8 @@ namespace RoaveTestAsset\DoctrineSimpleCache;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ClearableCache;
-use Doctrine\Common\Cache\MultiGetCache;
-use Doctrine\Common\Cache\MultiPutCache;
+use Doctrine\Common\Cache\MultiOperationCache;
 
-interface FullyImplementedCache extends Cache, ClearableCache, MultiGetCache, MultiPutCache
+interface FullyImplementedCache extends Cache, ClearableCache, MultiOperationCache
 {
 }
