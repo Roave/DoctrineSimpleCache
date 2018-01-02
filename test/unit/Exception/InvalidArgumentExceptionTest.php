@@ -4,12 +4,13 @@ declare(strict_types = 1);
 namespace RoaveTest\DoctrineSimpleCache\Exception;
 
 use Roave\DoctrineSimpleCache\Exception\InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\InvalidArgumentException as PsrInvalidArgumentException;
 
 /**
  * @covers \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
  */
-final class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
+final class InvalidArgumentExceptionTest extends TestCase
 {
     public function testFromKeyAndInvalidTTLObject()
     {
