@@ -28,6 +28,6 @@ final class CacheIntegrationTest extends SimpleCacheTest
         $this->skippedTests['testObjectDoesNotChangeInCache'] = true;
 
         // https://github.com/php-cache/integration-tests/pull/74/files
-        $this->skippedTests['testSetMultiple'] = true;
+        $this->skippedTests['testSetMultipleWithIntegerArrayKey'] = true;
     }
 }
