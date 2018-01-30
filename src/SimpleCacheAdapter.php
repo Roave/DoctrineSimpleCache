@@ -25,7 +25,7 @@ final class SimpleCacheAdapter implements PsrCache
         $this->doctrineCache = $doctrineCache;
 
         if (!$this->doctrineCache instanceof ClearableCache) {
-            throw Exception\CacheException::fromNonMultiOperationCache($this->doctrineCache);
+            throw Exception\CacheException::fromNonClearableCache($this->doctrineCache);
         }
 
         if (!$this->doctrineCache instanceof MultiOperationCache) {

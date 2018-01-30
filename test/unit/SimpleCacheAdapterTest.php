@@ -71,6 +71,7 @@ final class SimpleCacheAdapterTest extends TestCase
         $doctrineCache = $this->createMock(NotMultiOperationCache::class);
 
         $this->expectException(CacheException::class);
+        $this->expectExceptionMessage('not support multiple operations');
         new SimpleCacheAdapter($doctrineCache);
     }
 
@@ -80,6 +81,7 @@ final class SimpleCacheAdapterTest extends TestCase
         $doctrineCache = $this->createMock(NotClearableCache::class);
 
         $this->expectException(CacheException::class);
+        $this->expectExceptionMessage('not clearable');
         new SimpleCacheAdapter($doctrineCache);
     }
 
