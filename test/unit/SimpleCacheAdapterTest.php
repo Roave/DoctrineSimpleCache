@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace RoaveTest\DoctrineSimpleCache;
 
 use Doctrine\Common\Cache\ArrayCache;
+use PHPUnit\Framework\TestCase;
 use Roave\DoctrineSimpleCache\Exception\CacheException;
 use Roave\DoctrineSimpleCache\Exception\InvalidArgumentException;
 use Roave\DoctrineSimpleCache\SimpleCacheAdapter;
@@ -14,7 +15,7 @@ use RoaveTestAsset\DoctrineSimpleCache\NotMultiOperationCache;
 /**
  * @covers \Roave\DoctrineSimpleCache\SimpleCacheAdapter
  */
-final class SimpleCacheAdapterTest extends \PHPUnit_Framework_TestCase
+final class SimpleCacheAdapterTest extends TestCase
 {
     public function invalidTTLs() : array
     {

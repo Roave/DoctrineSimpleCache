@@ -4,13 +4,14 @@ declare(strict_types = 1);
 namespace RoaveTest\DoctrineSimpleCache\Exception;
 
 use Doctrine\Common\Cache\Cache as DoctrineCache;
+use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheException as PsrCacheException;
 use Roave\DoctrineSimpleCache\Exception\CacheException;
 
 /**
  * @covers \Roave\DoctrineSimpleCache\Exception\CacheException
  */
-final class CacheExceptionTest extends \PHPUnit_Framework_TestCase
+final class CacheExceptionTest extends TestCase
 {
     public function testFromNonClearableCache()
     {

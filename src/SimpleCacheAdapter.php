@@ -60,7 +60,7 @@ final class SimpleCacheAdapter implements PsrCache
     private function filterValidateMultipleKeys($keys) : array
     {
         if ($keys instanceof \Traversable) {
-            $keys = iterator_to_array($keys);
+            $keys = iterator_to_array($keys, false);
         }
 
         if (!is_array($keys)) {
