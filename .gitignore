@@ -1,6 +1,5 @@
 vendor/
 composer.lock
 phpunit.xml
-humbug.json
-humbuglog.json
-humbuglog.txt
+infection.json
+infection-log.txt
