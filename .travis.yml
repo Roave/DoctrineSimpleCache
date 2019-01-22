@@ -3,18 +3,41 @@ language: php
 php:
   - 7.1
   - 7.2
+  - 7.3
 
 env:
   matrix:
-    - DEPENDENCIES=""
-    - DEPENDENCIES="--prefer-lowest --prefer-stable"
+    - COMPOSER_FLAGS=""
+    - COMPOSER_FLAGS="--prefer-lowest"
 
-before_script:
-  - composer update --prefer-dist $DEPENDENCIES
+stages:
+  - test
+  - test with coverage
+  - infection
 
-script:
-  - vendor/bin/phpunit --coverage-text --coverage-clover=clover.xml --colors
-  - vendor/bin/infection --log-verbosity=none --threads=4
+before_install: phpenv config-rm xdebug.ini || echo "xdebug not available"
 
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover.xml
+install: travis_retry composer update --optimize-autoloader --prefer-dist --prefer-stable --no-progress --no-interaction --no-suggest $COMPOSER_FLAGS -vv
+
+script: vendor/bin/phpunit --colors --no-coverage
+
+jobs:
+  allow_failures:
+    - php: nightly
+  include:
+    - php: nightly
+      env: COMPOSER_FLAGS="--ignore-platform-reqs"
+
+    - stage: test with coverage
+      php: 7.1
+      env: COMPOSER_FLAGS=""
+      before_install: skip
+      script: vendor/bin/phpunit --colors --coverage-clover=clover.xml --coverage-text
+      after_success:
+        - wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover.xml
+
+    - stage: infection
+      php: 7.1
+      env: COMPOSER_FLAGS=""
+      before_install: skip
+      script: vendor/bin/infection --log-verbosity=none --threads=4 --min-covered-msi=68 --min-msi=68

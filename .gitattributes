@@ -1,0 +1,9 @@
+# text files
+*                text=auto
+*.md             text eol=lf
+*.json           text eol=lf
+*.lock           text eol=lf
+*.php            text eol=lf
+*.yml            text eol=lf
+*.dist           text eol=lf
+LICENSE          text eol=lf
