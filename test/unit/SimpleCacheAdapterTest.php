@@ -85,6 +85,9 @@ final class SimpleCacheAdapterTest extends TestCase
         new SimpleCacheAdapter($doctrineCache);
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function testGetProxiesToDoctrineFetch()
     {
         $key = uniqid('key', true);
@@ -98,6 +101,9 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertSame($value, $psrCache->get($key));
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function testGetWithNotExistingKey()
     {
         $key = uniqid('key', true);
@@ -113,6 +119,9 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertSame($default, $psrCache->get($anotherKey, $default));
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function testGetWithFalseValueStoredInCache()
     {
         $key = uniqid('key', true);
@@ -123,6 +132,10 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertFalse($psrCache->get($key, uniqid('default', true)));
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Exception
+     */
     public function testSetProxiesToDoctrineSave()
     {
         $key = uniqid('key', true);
@@ -137,6 +150,9 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertTrue($psrCache->set($key, $value, $ttl));
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function testSetWithDateIntervalTTL()
     {
         $key = uniqid('key', true);
@@ -150,6 +166,10 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertSame($psrCache->get($key), $value);
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Exception
+     */
     public function testSetWithNonPositiveTTL()
     {
         $key = uniqid('key', true);
@@ -162,12 +182,13 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertSame($psrCache->get($key), $value);
 
         $psrCache->set($key, $value, -1);
-        self::assertNull($psrCache->get($key), null);
+        self::assertNull($psrCache->get($key));
     }
 
     /**
      * @param mixed $ttl
      * @dataProvider invalidTTLs
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testSetWithInvalidTTL($ttl)
     {
@@ -180,6 +201,9 @@ final class SimpleCacheAdapterTest extends TestCase
         $psrCache->set($key, $value, $ttl);
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function testDeleteProxiesToDoctrineDelete()
     {
         $key = uniqid('key', true);
@@ -218,6 +242,9 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertSame($values, $psrCache->getMultiple($keys));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testGetMultipleWithPartialKeys()
     {
         $values = [
@@ -267,6 +294,9 @@ final class SimpleCacheAdapterTest extends TestCase
         $psrCache->getMultiple(new \ArrayObject(array_keys($values)));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testGetMultipleAcceptsGenerator()
     {
         $values = [
@@ -295,6 +325,9 @@ final class SimpleCacheAdapterTest extends TestCase
         $psrCache->getMultiple(uniqid('string', true));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetMultipleProxiesToSaveMultiple()
     {
         $values = [
@@ -310,6 +343,9 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertTrue($psrCache->setMultiple($values));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetMultipleWithDateIntervalTTL()
     {
         $values = [
@@ -326,6 +362,9 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertSame($values, $psrCache->getMultiple($keys));
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function testSetMultipleWithNonPositiveTTL()
     {
         $values = [
@@ -347,6 +386,7 @@ final class SimpleCacheAdapterTest extends TestCase
     /**
      * @param mixed $ttl
      * @dataProvider invalidTTLs
+     * @throws \Exception
      */
     public function testSetMultipleWithInvalidTTL($ttl)
     {
@@ -369,6 +409,10 @@ final class SimpleCacheAdapterTest extends TestCase
         $psrCache->setMultiple(uniqid('string', true));
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Exception
+     */
     public function testSetMultipleAcceptsGenerator()
     {
         $key0 = uniqid('key0', true);
@@ -421,6 +465,9 @@ final class SimpleCacheAdapterTest extends TestCase
         self::assertFalse($psrCache->deleteMultiple($keys));
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function testHasProxiesToDoctrineContains()
     {
         $key = uniqid('key', true);

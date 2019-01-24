@@ -152,6 +152,7 @@ final class SimpleCacheAdapter implements PsrCache
      * @param null|int|\DateInterval $ttl
      * @return bool
      * @throws \Roave\DoctrineSimpleCache\Exception\InvalidArgumentException
+     * @throws \Exception
      */
     public function setMultiple($values, $ttl = null) : bool
     {
@@ -203,6 +204,9 @@ final class SimpleCacheAdapter implements PsrCache
         return $this->doctrineCache->contains($key);
     }
 
+    /**
+     * @throws \Exception
+     */
     private function convertDateIntervalToInteger(\DateInterval $ttl) : int
     {
         // Timestamp has 2038 year limitation, but it's unlikely to set TTL that long.
