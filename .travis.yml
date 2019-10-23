@@ -4,6 +4,7 @@ php:
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
 env:
   matrix:
@@ -29,7 +30,7 @@ jobs:
       env: COMPOSER_FLAGS="--ignore-platform-reqs"
 
     - stage: test with coverage
-      php: 7.1
+      php: 7.3
       env: COMPOSER_FLAGS=""
       before_install: skip
       script: vendor/bin/phpunit --colors --coverage-clover=clover.xml --coverage-text
@@ -37,7 +38,7 @@ jobs:
         - wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover.xml
 
     - stage: infection
-      php: 7.1
+      php: 7.3
       env: COMPOSER_FLAGS=""
       before_install: skip
       script: vendor/bin/infection --log-verbosity=none --threads=4 --min-covered-msi=68 --min-msi=68
