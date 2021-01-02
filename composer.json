@@ -10,7 +10,7 @@
     "require-dev": {
         "cache/integration-tests": "dev-master",
         "cache/tag-interop": "dev-master",
-        "infection/infection": "^0.14.2",
+        "infection/infection": "^0.20.0",
         "phpunit/phpunit": "^8.4",
         "symfony/console": "^4.3",
         "symfony/phpunit-bridge": "^4.4@dev"
