@@ -8,6 +8,7 @@ env:
   matrix:
     - COMPOSER_FLAGS=""
     - COMPOSER_FLAGS="--prefer-lowest"
+    - XDEBUG_MODE=coverage
 
 stages:
   - test
