@@ -56,5 +56,4 @@ jobs:
         run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "Infection"
-        run: "vendor\bin\infection"
-
+        run: "vendor/bin/infection"
