@@ -19,9 +19,10 @@ jobs:
         dependencies:
           - "lowest"
           - "highest"
-          - "locked"
         php-version:
+          - "7.4"
           - "8.0"
+          - "8.1"
         operating-system:
           - "ubuntu-latest"
           - "windows-latest"
@@ -53,10 +54,6 @@ jobs:
       - name: "Install highest dependencies"
         if: ${{ matrix.dependencies == 'highest' }}
         run: "composer update --no-interaction --no-progress --no-suggest"
-
-      - name: "Install locked dependencies"
-        if: ${{ matrix.dependencies == 'locked' }}
-        run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "Tests"
         run: "vendor/bin/phpunit"
