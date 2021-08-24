@@ -3,17 +3,17 @@
     "description": "Doctrine Cache adapter for PSR-16 Simple Cache",
     "type": "library",
     "require": {
-        "php": "^7.4 || ~8.0.0",
+        "php": "7.4.*|8.0.*|8.1.*",
         "doctrine/cache": "^1.7",
         "psr/simple-cache": "^1.0"
     },
     "require-dev": {
         "cache/integration-tests": "dev-master",
         "cache/tag-interop": "dev-master",
-        "infection/infection": "^0.20.0",
-        "phpunit/phpunit": "^8.4",
-        "symfony/console": "^4.3",
-        "symfony/phpunit-bridge": "^4.4@dev"
+        "infection/infection": "^0.24.0",
+        "phpunit/phpunit": "^9.5",
+        "symfony/console": "^5.3",
+        "symfony/phpunit-bridge": "^5.3"
     },
     "license": "MIT",
     "authors": [
