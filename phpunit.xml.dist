@@ -10,14 +10,14 @@
         bootstrap="vendor/autoload.php"
         colors="true"
 >
-    <testsuites>
-        <testsuite name="unit">
-            <directory>./test/unit</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="unit">
+      <directory>./test/unit</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
