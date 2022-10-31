@@ -11,9 +11,7 @@
         "cache/integration-tests": "dev-master",
         "cache/tag-interop": "dev-master",
         "infection/infection": "^0.26.16",
-        "phpunit/phpunit": "^9.5.26",
-        "symfony/console": "^4.4.48",
-        "symfony/phpunit-bridge": "^6.1.6@dev"
+        "phpunit/phpunit": "^9.5.26"
     },
     "license": "MIT",
     "authors": [
