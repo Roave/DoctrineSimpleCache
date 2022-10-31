@@ -12,7 +12,7 @@
         "cache/tag-interop": "dev-master",
         "infection/infection": "^0.20.0",
         "phpunit/phpunit": "^9.5.16",
-        "symfony/console": "^4.3",
+        "symfony/console": "^6.1.7",
         "symfony/phpunit-bridge": "^6.1.6@dev"
     },
     "license": "MIT",
