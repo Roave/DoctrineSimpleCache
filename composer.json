@@ -13,7 +13,7 @@
         "infection/infection": "^0.20.0",
         "phpunit/phpunit": "^9.5.16",
         "symfony/console": "^4.3",
-        "symfony/phpunit-bridge": "^4.4@dev"
+        "symfony/phpunit-bridge": "^6.1.6@dev"
     },
     "license": "MIT",
     "authors": [
