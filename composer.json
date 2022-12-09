@@ -11,7 +11,7 @@
         "cache/integration-tests": "dev-master",
         "cache/tag-interop": "dev-master",
         "infection/infection": "^0.26.16",
-        "phpunit/phpunit": "^9.5.26"
+        "phpunit/phpunit": "^9.5.27"
     },
     "license": "MIT",
     "authors": [
