@@ -8,7 +8,7 @@
 
 [PSR-16 SimpleCache](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-16-simple-cache.md)
 implementation that accepts a Doctrine Cache and adapts it for the PSR-16 standards.
- 
+
 ## Installation
 
 This will install `doctrine/cache` if not already installed.
@@ -44,8 +44,8 @@ final class MyCacheFactory
 
 ### BC Breaks in 2.0
 
- * Support for `MultiOperationCache` added, includes support for `deleteMultiple` in Doctrine 1.7 breaks:
-   * `CacheException` static constructors `fromNonMultiGetCache` and `fromNonMultiPutCache` have been replaced with
-     `fromNonMultiOperationCache`.
-   * `SimpleCacheAdapter` now requires an adapter implementing `MultiOperationCache`, and no longer specifically
-     requires a cache implementing `MultiGetCache` or `MultiPutCache` explicitly.
+* Support for `MultiOperationCache` added, includes support for `deleteMultiple` in Doctrine 1.7 breaks:
+  * `CacheException` static constructors `fromNonMultiGetCache` and `fromNonMultiPutCache` have been replaced with
+    `fromNonMultiOperationCache`.
+  * `SimpleCacheAdapter` now requires an adapter implementing `MultiOperationCache`, and no longer specifically
+    requires a cache implementing `MultiGetCache` or `MultiPutCache` explicitly.
