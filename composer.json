@@ -10,8 +10,8 @@
     "require-dev": {
         "cache/integration-tests": "dev-master",
         "cache/tag-interop": "dev-master",
-        "infection/infection": "^0.26.19",
-        "phpunit/phpunit": "^9.6.7"
+        "infection/infection": "^0.29.7",
+        "phpunit/phpunit": "^9.6.21"
     },
     "license": "MIT",
     "authors": [
