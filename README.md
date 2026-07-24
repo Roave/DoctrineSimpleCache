@@ -45,7 +45,7 @@ final class MyCacheFactory
 ### BC Breaks in 2.0
 
 * Support for `MultiOperationCache` added, includes support for `deleteMultiple` in Doctrine 1.7 breaks:
-  * `CacheException` static constructors `fromNonMultiGetCache` and `fromNonMultiPutCache` have been replaced with
-    `fromNonMultiOperationCache`.
-  * `SimpleCacheAdapter` now requires an adapter implementing `MultiOperationCache`, and no longer specifically
-    requires a cache implementing `MultiGetCache` or `MultiPutCache` explicitly.
+    * `CacheException` static constructors `fromNonMultiGetCache` and `fromNonMultiPutCache` have been replaced with
+      `fromNonMultiOperationCache`.
+    * `SimpleCacheAdapter` now requires an adapter implementing `MultiOperationCache`, and no longer specifically
+      requires a cache implementing `MultiGetCache` or `MultiPutCache` explicitly.
